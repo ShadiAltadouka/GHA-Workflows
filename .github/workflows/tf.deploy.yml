@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: clone-codebase
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Install Terraform
-      - uses: hashicorp/setup-terraform@v3.1.1
+        uses: hashicorp/setup-terraform@v3.1.1
         with:
           terraform_version: 1.1.0
 
