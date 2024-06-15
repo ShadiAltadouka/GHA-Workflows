@@ -1,0 +1,39 @@
+name: Docker Image
+
+on:
+    push:
+        tags:
+            - '*'
+    workflow_dispatch:
+
+
+jobs:
+    docker-build-push:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: clone-codebase
+              uses: actions/checkout@v2
+
+            - name: Install Docker
+              uses: docker/setup-build-action@v2
+
+            - name: Build Image (Inctremental)
+              run: |
+                docker build -t "${{ secrets.DOCKER_TOKEN }}/mynginx:${{ github.ref_name }}" .
+              working-directory: docker
+            
+            - name: Build Image (Latest)
+              run: |
+                docker build -t "${{ secrets.DOCKER_TOKEN }}/mynginx:latest" .
+              working-directory: docker
+
+            - name: Login to Docker (Latest)
+              run: |
+                echo "${{ secrets.DOCKER_TOKEN }}" | docker login  -u "${{ secrets.DOCKER_USER }}" --password-stdin
+            
+            - name: Push Image (Incremental)
+              run: docker push "${{ secrets.DOCKER_TOKEN }}/mynginx:${{ github.ref_name }}" .
+
+            - name: Push Image (Latest)
+              run: docker push "${{ secrets.DOCKER_TOKEN }}/mynginx:latest"
