@@ -9,7 +9,7 @@ resource "aws_iam_group" "group" {
 }
 
 resource "aws_iam_user_group_membership" "membership" {
-    groups = [aws_iam_group.name]
+    groups = [aws_iam_group.group.name]
     user = aws_iam_user.user.name
   
 }
