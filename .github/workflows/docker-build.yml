@@ -20,12 +20,12 @@ jobs:
 
             - name: Build Image (Inctremental)
               run: |
-                docker build -t "${{ secrets.DOCKER_TOKEN }}/mynginx:${{ github.ref_name }}" .
+                docker build -t "${{ secrets.DOCKER_USER}}/mynginx:${{ github.ref_name }}" .
               working-directory: docker
             
             - name: Build Image (Latest)
               run: |
-                docker build -t "${{ secrets.DOCKER_TOKEN }}/mynginx:latest" .
+                docker build -t "${{ secrets.DOCKER_USER }}/mynginx:latest" .
               working-directory: docker
 
             - name: Login to Docker (Latest)
@@ -33,7 +33,7 @@ jobs:
                 echo "${{ secrets.DOCKER_TOKEN }}" | docker login  -u "${{ secrets.DOCKER_USER }}" --password-stdin
             
             - name: Push Image (Incremental)
-              run: docker push "${{ secrets.DOCKER_TOKEN }}/mynginx:${{ github.ref_name }}" .
+              run: docker push "${{ secrets.DOCKER_USER }}/mynginx:${{ github.ref_name }}" .
 
             - name: Push Image (Latest)
-              run: docker push "${{ secrets.DOCKER_TOKEN }}/mynginx:latest"
+              run: docker push "${{ secrets.DOCKER_USER }}/mynginx:latest"
