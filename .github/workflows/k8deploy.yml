@@ -1,0 +1,32 @@
+name: EKS Deployment
+
+on:
+    workflow_run:
+        workflows: ["Docker Image"]
+        types:
+            - completed
+
+jobs:
+    k8deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: clone-codebase
+          uses: actions/checkout@v2
+
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+
+        - name: Update EKS kubeconfig
+          run: aws eks update-kubeconfig --name atlas-eks --region us-east-1
+
+        - name: Create Namespace
+          run: kubectl create ns web
+          
+        - name: Apply Deployment
+          working-directory: Kubernetes
+          run: kubectl apply -f httpd-deployment.yml
