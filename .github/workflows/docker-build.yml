@@ -33,7 +33,7 @@ jobs:
                 echo "${{ secrets.DOCKER_TOKEN }}" | docker login  -u "${{ secrets.DOCKER_USER }}" --password-stdin
             
             - name: Push Image (Incremental)
-              run: docker push "${{ secrets.DOCKER_USER }}/mynginx:${{ github.ref_name }}" .
+              run: docker push "${{ secrets.DOCKER_USER }}/mynginx:${{ github.ref_name }}"
 
             - name: Push Image (Latest)
               run: docker push "${{ secrets.DOCKER_USER }}/mynginx:latest"
